@@ -1,40 +1,61 @@
 "use strict";
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ActionsTypes = require('../constants/actionTypes');
+var ActionTypes = require('../constants/actionTypes');
 var EventEmitter = require('events').EventEmitter;
-var CHANGE_EVENT = 'change';
 var assign = require('object-assign');
 var _ = require('lodash');
+var CHANGE_EVENT = 'change';
 
 var _authors = [];
 
 var AuthorStore = assign({}, EventEmitter.prototype, {
-    addChangeListener: function (callback) {
-        this.on(CHANGE_EVENT, callback);
-    },
+	addChangeListener: function(callback) {
+		this.on(CHANGE_EVENT, callback);
+	},
 
-    removeChangeListner: function (callback) {
-        this.removeChangeListner(CHANGE_EVENT, callback);
-    },
+	removeChangeListener: function(callback) {
+		this.removeListener(CHANGE_EVENT, callback);
+	},
 
-    emitChangeListener: function () {
-        this.emit(CHANGE_EVENT);
-    },
-    getAllAuthors: function () {
-        return _authors;
-    },
-    getAuthorById: function (id) {
-        return _.find(_author, { id: id });
-    }
+	emitChange: function() {
+		this.emit(CHANGE_EVENT);
+	},
 
+	getAllAuthors: function() {
+		return _authors;
+	},
+
+	getAuthorById: function(id) {
+		return _.find(_authors, {id: id});
+	}
 });
-Dispatcher.register(function (action) {
-    switch (action.ActionsTypes) {
-        case ActionsTypes.CREATE_AUTHOR:
-            _authors.push(action.author);
-            AuthorStore.emitChange();
-    }
+
+Dispatcher.register(function(action) {
+	switch(action.actionType) {
+		case ActionTypes.INITIALIZE:
+			_authors = action.initialData.authors;
+			AuthorStore.emitChange();
+			break;
+		case ActionTypes.CREATE_AUTHOR:
+			_authors.push(action.author);
+			AuthorStore.emitChange();
+			break;
+		case ActionTypes.UPDATE_AUTHOR:
+			var existingAuthor = _.find(_authors, {id: action.author.id});
+			var existingAuthorIndex = _.indexOf(_authors, existingAuthor); 
+			_authors.splice(existingAuthorIndex, 1, action.author);
+			AuthorStore.emitChange();
+			break;	
+		case ActionTypes.DELETE_AUTHOR:
+			_.remove(_authors, function(author) {
+				return action.id === author.id;
+			});
+			AuthorStore.emitChange();
+			break;
+		default:
+			// no op
+	}
 });
 
 module.exports = AuthorStore;
