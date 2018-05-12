@@ -6,8 +6,6 @@ var Input = require('../common/textInput');
 var CourseForm = React.createClass({
 	propTypes: {
 		course:	React.PropTypes.object.isRequired,
-		onSave:	React.PropTypes.func.isRequired,
-		onChange: React.PropTypes.func.isRequired,
 		errors: React.PropTypes.object
 	},
 
@@ -33,4 +31,4 @@ var CourseForm = React.createClass({
 	}
 });
 
-module.exports = AuthorForm;
+module.exports = CourseForm;
