@@ -2,6 +2,7 @@
 
 var React = require('react');
 var CourseForm = require('./courseForm');
+var CourseStore = require('../../stores/courseStore');
 
 var ManageCoursePage = React.createClass({
 	getInitialState: function () {
@@ -23,6 +24,12 @@ var ManageCoursePage = React.createClass({
 			},
 			dirty: false
 		};
+	},
+	componentWillMount: function() {
+		var courseId = this.props.params.id; //from the path '/author:id'
+		if (courseId) {
+			this.setState({course: CourseStore.getCourseById(courseId) });
+		}
 	},
 	render: function () {
 		return (

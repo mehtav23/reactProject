@@ -19,6 +19,24 @@ var CourseForm = React.createClass({
 					value={this.props.course.title}
 					onChange={this.props.onChange}
 					error={this.props.errors.title} />
+				<Input
+					name="link"
+					label="Link"
+					value={this.props.course.watchHref}
+					onChange={this.props.onChange}
+					error={this.props.errors.category} />
+				<Input
+					name="author"
+					label="Author"
+					value={this.props.course.author.name}
+					onChange={this.props.onChange}
+					error={this.props.errors.category} />
+				<Input
+					name="length"
+					label="Length"
+					value={this.props.course.length}
+					onChange={this.props.onChange}
+					error={this.props.errors.category} />
 
 				<Input
 					name="category"
@@ -26,6 +44,7 @@ var CourseForm = React.createClass({
 					value={this.props.course.category}
 					onChange={this.props.onChange}
 					error={this.props.errors.category} />
+				
 			</form>
 		);
 	}

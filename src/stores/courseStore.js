@@ -15,6 +15,9 @@ var CourseStore = assign({}, EventEmitter.prototype, {
 	},
     getAllCourses: function() {
 		return _courses;
+	},
+	getCourseById: function(id) {
+		return _.find(_courses, {id: id});
 	}
 });
 
